@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  finance-assistant:
+    build: .
+    container_name: finance-assistant
+    ports:
+      - "8501:8501"  # Streamlit frontend
+      - "8000:8000"  # API Agent
+      - "8001:8001"  # Scraping Agent
+      - "8002:8002"  # Retriever Agent
+      - "8003:8003"  # Analysis Agent
+      - "8004:8004"  # Language Agent
+      - "8005:8005"  # Orchestrator
+      - "8006:8006"  # Voice Agent
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - PYTHONPATH=/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Redis for caching (if needed)
+  redis:
+    image: redis:7-alpine
+    container_name: finance-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:

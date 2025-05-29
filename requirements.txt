@@ -22,3 +22,8 @@ anthropic
 aiohttp
 psutil
 yfinance
+httpx
+python-multipart
+aiohttp
+beautifulsoup4
+lxml
