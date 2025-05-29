@@ -1,0 +1,52 @@
+@echo off
+echo 🚀 Starting Financial Assistant Multi-Agent System...
+echo.
+
+REM Set Python path for proper imports
+set PYTHONPATH=.
+
+echo 📡 Starting API Agent (Port 8000)...
+start "API Agent" cmd /k "uvicorn agents.api_agent.main:app --port 8000"
+timeout /t 2 /nobreak >nul
+
+echo 🕷️ Starting Scraping Agent (Port 8001)...
+start "Scraping Agent" cmd /k "uvicorn agents.scraping_agent.main:app --port 8001"
+timeout /t 2 /nobreak >nul
+
+echo 🔍 Starting Retriever Agent (Port 8002)...
+start "Retriever Agent" cmd /k "uvicorn agents.retriever_agent.main:app --port 8002"
+timeout /t 2 /nobreak >nul
+
+echo 📊 Starting Analysis Agent (Port 8003)...
+start "Analysis Agent" cmd /k "uvicorn agents.analysis_agent.main:app --port 8003"
+timeout /t 2 /nobreak >nul
+
+echo 🤖 Starting Language Agent (Port 8004)...
+start "Language Agent" cmd /k "uvicorn agents.language_agent.main:app --port 8004"
+timeout /t 2 /nobreak >nul
+
+echo 🧠 Starting Orchestrator (Port 8005)...
+start "Orchestrator" cmd /k "uvicorn agents.orchestrator.main:app --port 8005"
+timeout /t 2 /nobreak >nul
+
+echo 🎙️ Starting Voice Agent (Port 8006)...
+start "Voice Agent" cmd /k "uvicorn agents.voice_agent.main:app --port 8006"
+
+echo.
+echo ✅ All agents started successfully!
+echo.
+echo 🌐 Services running on:
+echo    📡 API Agent:       http://localhost:8000
+echo    🕷️ Scraping Agent:  http://localhost:8001
+echo    🔍 Retriever Agent: http://localhost:8002
+echo    📊 Analysis Agent:  http://localhost:8003
+echo    🤖 Language Agent:  http://localhost:8004
+echo    🧠 Orchestrator:    http://localhost:8005
+echo    🎙️ Voice Agent:     http://localhost:8006
+echo.
+echo 🎯 Next step: Run 'streamlit run streamlit_app.py' to start the web interface
+echo.
+echo 💡 Tip: Wait 10-15 seconds for all services to fully initialize
+echo 🔧 Debug: Check individual terminal windows if any service fails
+echo.
+pause

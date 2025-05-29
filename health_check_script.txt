@@ -1,0 +1,58 @@
+@echo off
+echo 🏥 Financial Assistant - Service Health Check
+echo ================================================
+echo.
+
+REM Function to check service health
+:check_service
+set service_name=%1
+set port=%2
+echo Checking %service_name% (Port %port%)...
+
+curl -s http://localhost:%port%/health >nul 2>&1
+if %errorlevel% == 0 (
+    echo ✅ %service_name% - HEALTHY
+) else (
+    echo ❌ %service_name% - NOT RESPONDING
+)
+echo.
+goto :eof
+
+REM Check all services
+call :check_service "API Agent" 8000
+call :check_service "Scraping Agent" 8001
+call :check_service "Retriever Agent" 8002
+call :check_service "Analysis Agent" 8003
+call :check_service "Language Agent" 8004
+call :check_service "Orchestrator" 8005
+call :check_service "Voice Agent" 8006
+
+echo ================================================
+echo 🔍 Detailed Health Information:
+echo.
+
+echo 📡 API Agent Status:
+curl -s http://localhost:8000/health 2>nul || echo "Service not available"
+echo.
+
+echo 🤖 Language Agent Debug:
+curl -s http://localhost:8004/debug 2>nul || echo "Debug endpoint not available"
+echo.
+
+echo 🧠 Orchestrator Status:
+curl -s http://localhost:8005/health 2>nul || echo "Service not available"
+echo.
+
+echo ================================================
+echo 💡 Troubleshooting Tips:
+echo.
+echo If services are not responding:
+echo 1. Make sure start_agents.bat was run successfully
+echo 2. Check individual terminal windows for error messages
+echo 3. Verify API keys are set (GROQ_API_KEY, GEMINI_API_KEY)
+echo 4. Try restarting individual services manually
+echo.
+echo Manual service restart example:
+echo uvicorn agents.language_agent.main:app --port 8004
+echo.
+pause
